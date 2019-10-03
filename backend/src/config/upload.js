@@ -6,7 +6,11 @@ module.exports = {
     destination: path.resolve(__dirname, '..', '..', 'uploads'),
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
-      const name = path.basename(file.originalname);
+      const name = path
+        .basename(file.originalname)
+        .toLowerCase() // slugfy
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
 
       cb(null, `${name}-${Date.now()}${ext}`);
     },
