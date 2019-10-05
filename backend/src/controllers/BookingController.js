@@ -20,8 +20,7 @@ module.exports = {
     const ownerSocket = req.connectedUsers[booking.spot.user];
 
     if (ownerSocket){
-      req.io.to(ownerSocket).emmit('booking_request', booking)
-
+      req.io.to(ownerSocket).emit('booking_request', booking);
     }
 
     return res.json(booking);

@@ -19,7 +19,7 @@ export default function Dashboard() {
     socket.on('booking_request', data => {
       setRequests([...requests, data])
     });
-  },[])
+  },[requests, socket])
 
   useEffect(() => {
     async function loadSpots() {
@@ -35,13 +35,13 @@ export default function Dashboard() {
   }, []);
 
   async function handleAccept(id){
-    await api.post(`/bookings/${id}/appovals`);
-    setRequests(requests.filter(request => request._id === id));
+    await api.post(`/bookings/${id}/approvals`);
+    setRequests(requests.filter(request => request._id !== id));
   }
 
   async function handleReject(id){
     await api.post(`/bookings/${id}/rejections`);
-    setRequests(requests.filter(request => request._id === id));
+    setRequests(requests.filter(request => request._id !== id));
   }
 
   return (
@@ -50,11 +50,11 @@ export default function Dashboard() {
         {requests.map(request => (
           <li key={request.id}>
             <p>
-              <strong>{request.user.email}</strong>
+              <strong>{request.user.email} </strong>
               está solicitando uma reserva em
-              <strong>{request.spot.company}</strong>
+              <strong> {request.spot.company} </strong>
               para a data:
-              <strong>{request.date}</strong>
+              <strong> {request.date} </strong>
             </p>
 
             <button type="button" className='accept' onClick={() => handleAccept(request._id)}>ACEITAR</button>
